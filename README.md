@@ -36,15 +36,86 @@
 
 1. Teste simples com 100 requisições:
 
-    go run main.go -url=https://api.exemplo.com -requests=100
+        go run main.go -url=https://api.exemplo.com -requests=100
 
 2. Teste com alta concorrência:
 
-    go run main.go -url=https://api.exemplo.com -requests=1000 -concurrency=50
+       go run main.go -url=https://api.exemplo.com -requests=1000 -concurrency=50
 
 3. Exportar resultados em JSON:
 
-    go run main.go -url=https://api.exemplo.com -requests=100 -format=json
+       go run main.go -url=https://api.exemplo.com -requests=100 -format=json
+
+## Exemplos por Tipo de Requisição
+
+### Teste GET Básico
+
+    go run main.go -url "https://example.com" -requests 100 -concurrency 10
+
+### Teste POST com Dados JSON
+
+    go run main.go \
+      -url "https://api.example.com/login" \
+      -method "POST" \
+      -requests 200 \
+      -concurrency 20 \
+      -headers "Content-Type:application/json" \
+      -body '{"username":"testuser","password":"password123"}'
+
+### Teste com Autenticação
+
+    go run main.go \
+      -url "https://api.example.com/protected-endpoint" \
+      -method "GET" \
+      -requests 300 \
+      -concurrency 30 \
+      -headers "Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+      -timeout 8s
+
+### Teste PUT para Atualização de Recursos
+
+    go run main.go \
+      -url "https://api.example.com/users/123" \
+      -method "PUT" \
+      -requests 150 \
+      -concurrency 15 \
+      -headers "Content-Type:application/json,Authorization:Bearer token123" \
+      -body '{"name":"Updated User","status":"active"}'
+
+### Teste DELETE
+
+    go run main.go \
+      -url "https://api.example.com/resources/456" \
+      -method "DELETE" \
+      -requests 100 \
+      -concurrency 10 \
+      -headers "Authorization:Bearer token123"
+
+### Exportando Resultados em Diferentes Formatos
+
+#### CSV
+
+    go run main.go \
+      -url "https://example.com/api" \
+      -requests 500 \
+      -concurrency 25 \
+      -format csv > results.csv
+
+#### JSON
+
+    go run main.go \
+      -url "https://example.com/api" \
+      -requests 500 \
+      -concurrency 25 \
+      -format json > results.json
+
+## Teste de Estresse com Alto Volume
+
+    go run main.go \
+      -url "https://api.example.com/endpoint" \
+      -requests 10000 \
+      -concurrency 200 \
+      -timeout 30s
 
 ### usando docker
 
