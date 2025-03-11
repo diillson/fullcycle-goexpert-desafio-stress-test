@@ -93,7 +93,21 @@ func main() {
 	timeoutFlag := flag.Duration("timeout", 10*time.Second, "Timeout for each request")
 	methodFlag := flag.String("method", "GET", "HTTP method to use")
 	formatFlag := flag.String("format", "plain", "Output format (plain, json, csv)")
+	headersFlag := flag.String("headers", "", "Headers in format 'key1:value1,key2:value2'")
+	bodyFlag := flag.String("body", "", "Request body")
 	flag.Parse()
+
+	// Processar headers
+	headersMap := make(map[string]string)
+	if *headersFlag != "" {
+		pairs := strings.Split(*headersFlag, ",")
+		for _, pair := range pairs {
+			kv := strings.SplitN(pair, ":", 2)
+			if len(kv) == 2 {
+				headersMap[strings.TrimSpace(kv[0])] = strings.TrimSpace(kv[1])
+			}
+		}
+	}
 
 	config := Config{
 		URL:         *urlFlag,
@@ -102,6 +116,8 @@ func main() {
 		Timeout:     *timeoutFlag,
 		Method:      *methodFlag,
 		Format:      *formatFlag,
+		Headers:     headersMap,
+		Body:        *bodyFlag,
 	}
 
 	if config.URL == "" || config.Requests == 0 {
